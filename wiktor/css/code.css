@@ -1,0 +1,26 @@
+pre {
+   margin: 20px;
+   padding: 10px;
+}
+
+pre code {
+   font-family: Fira Code;
+   font-weight: 400;
+}
+
+code>.string {
+   color: #A5D6A7;
+}
+
+code>.comment {
+   color: #0003;
+   text-emphasis-style: italic;
+}
+
+code>.punctuation {
+   color: #90CAF9;
+}
+
+code>.keyword {
+   color: #FFAB91;
+}
