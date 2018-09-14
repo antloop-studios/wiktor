@@ -3,7 +3,6 @@
    MIT license
 */
 
-
 entry {
    display: block;
    text-align: justify;
@@ -17,7 +16,7 @@ entry h1:first-child {
    top: 0px;
    background: white;
    padding: 10px 20px;
-   border-bottom: 1px solid;
+   border-bottom: 1px dotted;
    font-weight: 600;
    margin-bottom: 0;
 }

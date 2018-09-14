@@ -3,19 +3,15 @@
    MIT license
 */
 
-
 @import 'code.css';
 @import 'entry.css';
 @import 'nav.css';
-
-
 #w-version {
    margin: auto;
    margin-bottom: 0;
    padding: 10px;
    color: #0002;
 }
-
 
 body {
    font-family: Fira Code;

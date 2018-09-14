@@ -3,10 +3,8 @@
    MIT license
 */
 
-
 nav {
-   background: #00000005;
-   border-right: 2px solid #0091EA;
+   border-right: 1px dotted #0091EA;
    position: fixed;
    top: 0;
    bottom: 0;
@@ -15,7 +13,6 @@ nav {
    display: flex;
    flex-flow: column;
    text-transform: capitalize;
-   z-index: 99;
    overflow: auto;
 }
 
