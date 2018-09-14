@@ -1,15 +1,19 @@
 entry {
    display: block;
-   border-bottom: dotted 2px #0091EA;
    text-align: justify;
-   margin-bottom: 20px;
    padding: 20px;
 }
 
 entry h1:first-child {
    display: flex;
-   margin: 0;
-   text-transform: uppercase;
+   margin: -20px;
+   position: sticky;
+   top: 0px;
+   background: white;
+   padding: 10px 20px;
+   border-bottom: 1px solid;
+   font-weight: 600;
+   margin-bottom: 0;
 }
 
 hr {
@@ -25,7 +29,6 @@ entry close {
 
 entry close::after {
    content: "✕";
-   color: lightgray;
 }
 
 entry close:hover {
@@ -43,6 +46,7 @@ entry>p {
 
 h1, h2, h3, h4, h5, h6 {
    color: #0091EA;
+   font-weight: 500;
 }
 
 h1 {
