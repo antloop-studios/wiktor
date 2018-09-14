@@ -33,7 +33,7 @@ content {
    width: 75%;
 }
 
-empty {
+#empty {
    display: flex;
    background: #fff;
    position: absolute;
@@ -44,7 +44,7 @@ empty {
    right: 0;
 }
 
-empty .message {
+#empty .message {
    margin: auto;
    text-align: center;
    font-weight: 400;
@@ -52,11 +52,11 @@ empty .message {
    color: #0091EA;
 }
 
-empty p {
+#empty p {
    margin-top: 0px;
 }
 
-empty h1 {
+#empty h1 {
    text-align: center;
    margin-bottom: 0px;
    font-size: 40pt;

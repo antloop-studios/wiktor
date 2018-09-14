@@ -97,13 +97,13 @@ $(function () {
       $.when(...dentries)
          .done(function () {
             if ($('content')[0].childElementCount == 0) {
-               $('empty').fadeIn(fadetime);
+               $('#empty').fadeIn(fadetime);
             }
             $('nav').fadeIn(fadetime);
          })
          .fail(function () {
             if ($('content')[0].childElementCount == 0) {
-               $('empty').fadeIn(fadetime);
+               $('#empty').fadeIn(fadetime);
             }
             $('nav').fadeIn(fadetime);
          })
