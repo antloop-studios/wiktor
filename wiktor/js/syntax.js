@@ -1,3 +1,9 @@
+/*
+   Daniels Kursits (evolbug) 2018
+   MIT license
+*/
+
+
 function findall(regex_pattern, string_, typename) {
    var output_list = [];
    while (true) {
