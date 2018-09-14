@@ -1,6 +1,6 @@
 Wiktor wiki engine : MIT License
 
-Copyright (c) 2018 Daniēls Kursīts 'evolbug' (https://github.com/evolbug) 
+Copyright (c) 2018, Daniēls Kursīts 'evolbug' (https://github.com/evolbug) 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,5 +27,13 @@ Copyright (c) 2011-2018, Christopher Jeffrey (https://github.com/chjj/)
 
 ---
 
-THIS SOFTWARE USES : jQuery (https://jquery.org/) : MIT License
+THIS SOFTWARE USES : jQuery 3.3.1 (https://jquery.org/) : MIT License
 Copyright (c) The jQuery Foundation
+
+---
+
+THIS SOFTWARE USES : Fira Code (https://github.com/tonsky/FiraCode) : SIL OPEN FONT LICENSE Version 1.1
+Copyright (c) 2014, Nikita Prokopov    http://tonsky.me     with Reserved Font Name Fira Code.
+Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Sans.
+Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Mono.
+Copyright (c) 2014, Telefonica S.A.
