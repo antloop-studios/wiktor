@@ -3,6 +3,14 @@
 @import 'nav.css';
 
 
+#w-version {
+   margin: auto;
+   margin-bottom: 0;
+   padding: 10px;
+   color: #0002;
+}
+
+
 body {
    font-family: Fira Code;
    text-rendering: optimizeLegibility;
@@ -10,13 +18,6 @@ body {
    font-weight: 300;
    font-size: 12pt;
    margin: 0;
-}
-
-.version {
-   margin: auto;
-   margin-bottom: 0;
-   padding: 10px;
-   color: #0002;
 }
 
 content {
