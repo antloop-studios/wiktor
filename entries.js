@@ -1,3 +1,1 @@
-var entries = [
-   'mdtest'
-];
+var entries = ["mdtest"];
