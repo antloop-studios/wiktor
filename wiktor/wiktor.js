@@ -293,7 +293,7 @@ function mkentry(path, after) {
                   .filter(
                      (_, a) =>
                         a.hash != "" &&
-                        !a.attributes["href"].nodeValue.startsWith("/")
+                        !a.attributes["href"].value.startsWith("/")
                   )
                   .each(
                      (_, e) => (e.hash = "#" + path + subsep + e.hash.substr(1))
@@ -305,9 +305,15 @@ function mkentry(path, after) {
                         a.hash != "" &&
                         a.attributes["href"].nodeValue.startsWith("/")
                   )
-                  .each((_, e) =>
-                     $(e).on("click", () => mkentry(e.hash.substr(1), openpath))
-                  );
+                  .each((_, e) => {
+                     e.attributes["href"].value = e.attributes[
+                        "href"
+                     ].value.substr(1);
+
+                     $(e).on("click", () =>
+                        mkentry(e.hash.substr(1), openpath)
+                     );
+                  });
 
                $("a", entryHtml)
                   .filter((_, a) => a.name != "")
@@ -337,11 +343,10 @@ function wiktor(landing) {
       $(() => $("body").fadeIn(fadetime));
 
       var hashpath = window.location.hash.substr(1);
+      if (landing) mkentry(landing, openpath);
 
       if (hashpath.split(subsep)[0])
          mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
-
-      if (landing) mkentry(landing, openpath);
    }).fail(() => {
       $("#empty").fadeIn(fadetime);
       $("body").fadeIn(fadetime);
