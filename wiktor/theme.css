@@ -1,0 +1,356 @@
+/* Config ------------------------------------------------------------------ */
+
+.light, :root {
+   --font-code: "Fira Code";
+   --font-text: "Fira Code";
+   --fg-primary: #444;
+   --bg-primary: #fff;
+   --fg-secondary: #fff;
+   --bg-secondary: #444;
+   --accent: #0091EA;
+   --c-string: #7cb342;
+   --c-keyword: #d81b60;
+   --c-comment: #888;
+   --c-punctuation: #039be5;
+}
+
+.dark {
+   --fg-primary: #ccc;
+   --bg-primary: #1e1e1e;
+   --fg-secondary: #ccc;
+   --bg-secondary: #151515;
+   --accent: #0091EA;
+}
+
+/* Responsive -------------------------------------------------------------- */
+
+* {
+   box-sizing: border-box;
+}
+
+/* Mobile */
+
+@media only screen and (max-width: 767px) {
+   nav, nav links, content {
+      width: 100%;
+      overflow: hidden;
+      height: auto;
+   }
+   content entry {
+      margin: 10px 0;
+      padding: 20px 5px;
+   }
+   content entry h1.header {
+      margin: -20px 0;
+   }
+   body {
+      display: block;
+      overflow: auto;
+      text-align: left;
+      height: auto;
+   }
+   .go-top {
+      color: var(--fg-primary);
+      background: var(--bg-primary);
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      font-size: 30pt;
+      border-radius: 999px;
+      opacity: 1;
+      z-index: 99;
+   }
+}
+
+/* Desktop */
+
+@media only screen and (min-width: 767px) {
+   body {
+      display: flex;
+      flex-flow: row wrap;
+      overflow: hidden;
+      text-align: justify;
+      height: 100%;
+   }
+   nav {
+      width: 16.66%;
+   }
+   content {
+      width: 83.33%;
+   }
+   nav, nav links, content {
+      overflow: auto;
+      height: 100%;
+   }
+   content entry {
+      margin: 10px;
+      padding: 20px;
+   }
+   content entry h1.header {
+      margin: -20px;
+   }
+   .go-top {
+      display: none;
+   }
+}
+
+/* Main -------------------------------------------------------------------- */
+
+html {
+   background: var(--bg-primary);
+}
+
+body {
+   background: var(--bg-secondary);
+   font-family: var(--font-text);
+   margin: 0;
+}
+
+#empty {
+   display: flex;
+   position: absolute;
+   z-index: 99999;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: var(--bg-primary);
+}
+
+#empty .message {
+   margin: auto;
+   text-align: center;
+   font-weight: 400;
+   font-size: 20pt;
+   color: var(--accent);
+}
+
+#empty .message p {
+   margin-top: 0px;
+}
+
+#empty .message h1 {
+   text-align: center;
+   margin-bottom: 0px;
+   font-size: 40pt;
+}
+
+a {
+   color: var(--accent);
+   opacity: 0.5;
+   text-decoration: none;
+}
+
+a:hover {
+   opacity: 1;
+}
+
+/* Navigation -------------------------------------------------------------- */
+
+nav {
+   display: flex;
+   flex-flow: column;
+   color: var(--fg-secondary);
+   background: var(--bg-secondary);
+}
+
+nav links {
+   margin-left: 20px;
+}
+
+nav a {
+   color: var(--fg-secondary);
+}
+
+nav links ul {
+   padding-left: 0px;
+}
+
+nav links ul ul {
+   padding-bottom: 5px;
+}
+
+nav links ul>li {
+   list-style-type: disclosure-open;
+}
+
+nav links li {
+   list-style: none;
+   font-weight: 400;
+   margin-left: 20px;
+}
+
+nav links a {
+   display: flex;
+   padding: 5px;
+}
+
+nav #w-version {
+   display: flex;
+   flex-flow: row;
+   margin-top: auto;
+   padding: 5px;
+}
+
+nav #w-version a {
+   margin: auto 0;
+}
+
+nav #w-version a:first-child {
+   margin-right: auto;
+}
+
+/* Content ----------------------------------------------------------------- */
+
+content {
+   background: var(--bg-secondary);
+   color: var(--fg-primary);
+   height: 100%;
+}
+
+content entry {
+   background: var(--bg-primary);
+   box-shadow: 0 0 10px -5px var(--fg-secondary);
+   display: block;
+}
+
+content entry h1.header {
+   background: var(--bg-primary);
+   box-shadow: 0 1px 2px -2px var(--fg-primary);
+   display: flex;
+   position: sticky;
+   top: 0px;
+   font-weight: 600;
+   padding: 10px 20px;
+   margin-bottom: 0;
+   z-index: 1;
+}
+
+content entry>h1>a {
+   position: relative;
+   top: -3em;
+}
+
+content entry close {
+   margin: auto;
+   margin-right: 0px;
+   font-size: 25px;
+}
+
+content entry close::after {
+   content: "✕";
+}
+
+content entry close:hover {
+   cursor: pointer;
+}
+
+content entry img {
+   max-width: 100%;
+}
+
+content entry pre {
+   white-space: pre-wrap;
+}
+
+content entry li {
+   padding: 5px;
+}
+
+content entry hr {
+   opacity: 0.2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+   color: var(--accent);
+   font-weight: 500;
+}
+
+h1 {
+   font-size: 23pt;
+   text-transform: uppercase;
+}
+
+h2 {
+   font-size: 21pt;
+}
+
+h3 {
+   font-size: 19pt;
+}
+
+h4 {
+   font-size: 17pt;
+}
+
+h5 {
+   font-size: 14pt;
+}
+
+h6 {
+   font-size: 12pt;
+}
+
+.table-box {
+   overflow-x: auto;
+}
+
+.table-box table {
+   color: var(--fg-primary);
+   margin: 20px auto;
+   border-collapse: collapse;
+   width: 95%;
+}
+
+th, td {
+   border-right: 1px solid var(--accent);
+   padding: 5px;
+   min-width: 125px;
+}
+
+th {
+   color: var(--accent);
+}
+
+th:last-child, td:last-child {
+   border-right: none;
+}
+
+pre {
+   border-left: 2px solid var(--accent);
+   border-right: 2px solid var(--accent);
+   padding: 10px;
+   border-radius: 4px;
+}
+
+code {
+   border-left: 2px solid var(--accent);
+   border-right: 2px solid var(--accent);
+   font-size: 12pt;
+   padding: 1px 3px;
+   border-radius: 4px;
+}
+
+pre code {
+   font-family: var(--font-code);
+   font-weight: 400;
+   padding: 0;
+   border: none;
+}
+
+code>.string {
+   color: var(--c-string);
+}
+
+code>.comment {
+   color: var(--c-comment);
+   text-emphasis-style: italic;
+}
+
+code>.punctuation {
+   color: var(--c-punctuation);
+}
+
+code>.keyword {
+   color: var(--c-keyword);
+}

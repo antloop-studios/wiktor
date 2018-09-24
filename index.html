@@ -20,17 +20,22 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.5.0/marked.min.js" integrity="sha256-EMpcK4NfvalbB1sgBcpfS+POwc4F08hY3i3RVksd9Dw="
       crossorigin="anonymous"></script>
 
-   <script src="wiktor/js/jquery.js"></script>
+   <link rel="stylesheet" href="wiktor/theme.css">
    <script src="wiktor/js/syntax.js"></script>
    <script src="wiktor/wiktor.js"></script>
 </head>
 
-<body>
-   <nav style="display:none">
+<body style="display: none" id='head'>
+   <nav>
       <links>
       </links>
-      <span id='w-version'>Wiktor 0.2.2</span>
+
+      <span id='w-version'>
+         <a href="javascript:toggleTheme();" class="fas fa-palette"></a>
+         <a href="https://evolbug.github.io/wiktor">Wiktor 0.3.0</a>
+      </span>
    </nav>
+
    <content>
    </content>
    <div id='empty' style="display:none">
