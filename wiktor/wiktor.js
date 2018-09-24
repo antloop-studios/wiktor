@@ -54,7 +54,8 @@ function compose(source, tokens) {
 
    for (var i = 0; tokens[i]; i++) {
       final.push(tokens[i]);
-      if (tokens[i + 1] && tokens[i][2] == tokens[i + 1][2]) {
+
+      if (tokens[i + 1] && tokens[i][2] <= tokens[i + 1][2]) {
          var j = i + 1;
 
          while (
@@ -103,14 +104,7 @@ function loadLanguage(language, success) {
       data.comment = new RegExp(
          "(" +
             data.comment
-               .map(
-                  pair =>
-                     "(?:" +
-                     regEscape(pair[0]) +
-                     "(?:.|\\s)*?" +
-                     regEscape(pair[1]) +
-                     ")"
-               )
+               .map(pair => "(?:" + pair[0] + "(?:.|\\s)*?" + pair[1] + ")")
                .join("|") +
             ")",
          "gm"
