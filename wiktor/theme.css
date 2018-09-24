@@ -73,6 +73,36 @@
       height: 100%;
    }
    nav {
+      width: 33.33%;
+   }
+   content {
+      width: 66.66%;
+   }
+   nav, nav links, content {
+      overflow: auto;
+      height: 100%;
+   }
+   content entry {
+      margin: 10px;
+      padding: 20px;
+   }
+   content entry h1.header {
+      margin: -20px;
+   }
+   .go-top {
+      display: none;
+   }
+}
+
+@media only screen and (min-width: 1024px) {
+   body {
+      display: flex;
+      flex-flow: row wrap;
+      overflow: hidden;
+      text-align: justify;
+      height: 100%;
+   }
+   nav {
       width: 16.66%;
    }
    content {
@@ -97,7 +127,7 @@
 /* Main -------------------------------------------------------------------- */
 
 html {
-   background: var(--bg-primary);
+   background: var(--bg-secondary);
 }
 
 body {
@@ -155,7 +185,7 @@ nav {
 }
 
 nav links {
-   margin-left: 20px;
+   margin-left: 10px;
 }
 
 nav a {
@@ -171,7 +201,8 @@ nav links ul ul {
 }
 
 nav links ul>li {
-   list-style-type: disclosure-open;
+   /* list-style-type: disclosure-open; */
+   list-style-type: disc;
 }
 
 nav links li {
