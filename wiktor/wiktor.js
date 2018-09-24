@@ -263,12 +263,12 @@ function mkentry(path, after) {
          }
          cache[path] = true;
          $.get(
-            "entries/" + path.replace(pathsep, "/") + ".md",
+            "entries/" + path.replace(new RegExp(pathsep, "g"), "/") + ".md",
             { _: $.now() },
             function(entry) {
                title = path
-                  .replace(pathsep + "_index", "")
-                  .replace(pathsep, " · ");
+                  .replace(pathsep + indexfile, "")
+                  .replace(new RegExp(pathsep, "g"), " · ");
 
                var entryHtml = $(
                   "<entry id='" +
