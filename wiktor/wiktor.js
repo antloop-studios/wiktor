@@ -86,7 +86,10 @@ function htmlEscape(unsafe) {
 }
 
 function loadLanguage(language, success) {
-   language = "wiktor/" + language.replace("-", "/") + ".json";
+   language =
+      "https://raw.githubusercontent.com/wiktor-wiki/languages/master/" +
+      language.replace(/language-/g, "") +
+      ".json";
 
    return $.getJSON(language, { _: $.now() }, function(data) {
       data.keywords = new RegExp(data.keywords, "gm");
