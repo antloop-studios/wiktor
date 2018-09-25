@@ -369,19 +369,19 @@ pre code {
    border: none;
 }
 
-code>.string {
+code .string {
    color: var(--c-string);
 }
 
-code>.comment {
+code .comment {
    color: var(--c-comment);
    text-emphasis-style: italic;
 }
 
-code>.punctuation {
+code .punctuation {
    color: var(--c-punctuation);
 }
 
-code>.keyword {
+code .keyword {
    color: var(--c-keyword);
 }

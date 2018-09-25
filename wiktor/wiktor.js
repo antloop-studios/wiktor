@@ -3,6 +3,8 @@
    MIT license
 */
 
+"use strict";
+
 var fadetime = 100;
 var pathsep = ":";
 var subsep = "|";
@@ -39,9 +41,9 @@ function findall(regex_pattern, string_, typename) {
 function process(source, tokens, i = 0, last = 0) {
    return tokens[i]
       ? source.slice(last, tokens[i][2]) +
-           "<span class=" +
+           "<span class='" +
            tokens[i][0] +
-           ">" +
+           "'>" +
            htmlEscape(tokens[i][1]) +
            "</span>" +
            process(source, tokens, i + 1, tokens[i][2] + tokens[i][1].length)
@@ -49,46 +51,49 @@ function process(source, tokens, i = 0, last = 0) {
 }
 
 function compose(source, tokens) {
-   var tokens = [].concat(...tokens).sort((a, b) => a[2] >= b[2]);
-   var final = [];
-
-   for (var i = 0; tokens[i]; i++) {
-      final.push(tokens[i]);
-
-      if (tokens[i + 1] && tokens[i][2] <= tokens[i + 1][2]) {
-         var j = i + 1;
-
-         while (
-            tokens[i][2] + tokens[i][1].length >=
-            tokens[j][2] + tokens[j][1].length
-         ) {
-            j++;
+   for (var typea = 3; typea > 0; typea--) {
+      for (var typeb = typea - 1; typeb >= 0; typeb--) {
+         for (var itema = 0; tokens[typea][itema]; itema++) {
+            for (var itemb = 0; tokens[typeb][itemb]; itemb++) {
+               if (
+                  !(
+                     tokens[typea][itema][2] > tokens[typeb][itemb][2] ||
+                     tokens[typea][itema][2] + tokens[typea][itema][1].length <
+                        tokens[typeb][itemb][2] + tokens[typeb][itemb][1].length
+                  )
+               ) {
+                  tokens[typeb][itemb] = ["", "", 0];
+               }
+            }
          }
-
-         i = j - 1;
       }
    }
-
-   return process(source.innerText, final);
+   return process(
+      source.innerText,
+      []
+         .concat(...tokens)
+         .filter(e => e[0])
+         .sort((a, b) => (a[2] >= b[2] ? 1 : -1))
+   );
 }
 
 function regEscape(unsafe) {
-   return unsafe.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+   return unsafe.replace(new RegExp("[.*+?^${}()|[\\]\\\\]", "g"), "\\$&");
 }
 
 function htmlEscape(unsafe) {
    return unsafe
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(new RegExp("&", "g"), "&amp;")
+      .replace(new RegExp("<", "g"), "&lt;")
+      .replace(new RegExp(">", "g"), "&gt;")
+      .replace(new RegExp('"', "g"), "&quot;")
+      .replace(new RegExp("'", "g"), "&#039;");
 }
 
 function loadLanguage(language, success) {
    language =
       "https://raw.githubusercontent.com/wiktor-wiki/languages/master/" +
-      language.replace(/language-/g, "") +
+      language.replace("language-", "") +
       ".json";
 
    return $.getJSON(language, { _: $.now() }, function(data) {
@@ -269,7 +274,7 @@ function mkentry(path, after) {
             "entries/" + path.replace(new RegExp(pathsep, "g"), "/") + ".md",
             { _: $.now() },
             function(entry) {
-               title = path
+               var title = path
                   .replace(pathsep + indexfile, "")
                   .replace(new RegExp(pathsep, "g"), " · ");
 
