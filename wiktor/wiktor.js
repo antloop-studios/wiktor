@@ -340,17 +340,19 @@ function wiktor(landing) {
 
       mktree(preptree(entries)).appendTo("links");
 
-      $(
-         "<a href='https://github.com/wiktor-wiki/wiktor'>Wiktor " +
-            version +
-            "</a>"
-      ).appendTo("#w-version");
-
       var hashpath = window.location.hash.substr(1);
 
       if (hashpath.split(subsep)[0])
          mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
       else if (landing) mkentry(landing, openpath);
+
+      $(() =>
+         $(
+            "<a href='https://github.com/wiktor-wiki/wiktor'>Wiktor " +
+               version +
+               "</a>"
+         ).appendTo("#w-version")
+      );
 
       if ($("links ul")[0].childElementCount == 0) {
          $("#empty").show();
