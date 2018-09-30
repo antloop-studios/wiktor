@@ -10,6 +10,7 @@ var pathsep = ":";
 var subsep = "|";
 var cache = {};
 var indexfile = "index";
+var version = "0.3.4";
 
 function toggleTheme() {
    localStorage.setItem(
@@ -226,7 +227,7 @@ function mktree(entries, path = []) {
          return $("");
       }
 
-      for (var key in entries) {
+      Object.keys(entries).forEach(key => {
          var inner = $("<li></li>");
 
          var link = mkpath(path, key);
@@ -238,7 +239,7 @@ function mktree(entries, path = []) {
          }
 
          $("<a href='#" + link + "'>" + key + "</a>")
-            .on("click", () => mkentry(link, () => openpath(link)))
+            .on("click", () => mkentry(link, openpath))
             .appendTo(inner);
 
          cache[link] = false;
@@ -248,7 +249,7 @@ function mktree(entries, path = []) {
          path.pop();
 
          inner.appendTo(chunk);
-      }
+      });
    } else {
       path = mkpath(path, entries);
       cache[path] = false;
@@ -332,25 +333,31 @@ function mkentry(path, after) {
          );
       });
 }
+
 function wiktor(landing) {
    $.getJSON("wiktor/entries.json", { _: $.now() }, entries => {
       $("body").attr("class", localStorage.getItem("theme") || "light");
 
       mktree(preptree(entries)).appendTo("links");
 
-      if ($("links")[0].childElementCount == 0) {
-         $("#empty").fadeIn(fadetime);
-      }
-
-      $(() => $("body").fadeIn(fadetime));
+      $(
+         "<a href='https://github.com/wiktor-wiki/wiktor'>Wiktor " +
+            version +
+            "</a>"
+      ).appendTo("#w-version");
 
       var hashpath = window.location.hash.substr(1);
-      if (landing) mkentry(landing, openpath);
 
       if (hashpath.split(subsep)[0])
          mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
+      else if (landing) mkentry(landing, openpath);
+
+      if ($("links ul")[0].childElementCount == 0) {
+         $("#empty").show();
+      }
+      $("body").fadeIn(fadetime);
    }).fail(() => {
-      $("#empty").fadeIn(fadetime);
+      $("#empty").show();
       $("body").fadeIn(fadetime);
    });
 }
