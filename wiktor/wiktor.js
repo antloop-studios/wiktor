@@ -277,7 +277,7 @@ function wiktor(landing) {
 
          var hashpath = decodeURI(window.location.href.split(pathpref)[1]);
 
-         if (hashpath)
+         if (hashpath != "undefined")
             mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
          else if (landing) mkentry(landing, openpath);
 
