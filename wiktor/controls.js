@@ -57,19 +57,6 @@ function addMenu(icon, callback, options, selected) {
 
 /* Controls (in reverse order of appearance) ----------------------------------------- */
 
-localStorage.setItem("entry_root", localStorage.getItem("entry_root") || "en");
-function localize(lang) {
-   localStorage.setItem("entry_root", lang);
-   location.reload();
-}
-
-addMenu(
-   "fa fa-language",
-   localize,
-   ["en", "fr"],
-   localStorage.getItem("entry_root")
-);
-
 $(() => $("body").attr("class", localStorage.getItem("theme") || "dark"));
 function theme() {
    localStorage.setItem(
