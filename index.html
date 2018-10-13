@@ -9,51 +9,56 @@
    <meta charset="utf8" />
    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-   <link rel="stylesheet" href="https://cdn.rawgit.com/tonsky/FiraCode/1.205/distr/fira_code.css">
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.5.0/marked.min.js" integrity="sha256-EMpcK4NfvalbB1sgBcpfS+POwc4F08hY3i3RVksd9Dw="
+      crossorigin="anonymous"></script>
+
+   <link rel="stylesheet" href="https://gitcdn.link/repo/tonsky/FiraCode/1.206/distr/fira_code.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/solid.css" integrity="sha384-VGP9aw4WtGH/uPAOseYxZ+Vz/vaTb1ehm1bwx92Fm8dTrE+3boLfF1SpAtB1z7HW"
       crossorigin="anonymous">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/regular.css" integrity="sha384-ZlNfXjxAqKFWCwMwQFGhmMh3i89dWDnaFU2/VZg9CvsMGA7hXHQsPIqS+JIAmgEq"
       crossorigin="anonymous">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css" integrity="sha384-1rquJLNOM3ijoueaaeS5m+McXPJCGdr5HcA03/VHXxcp2kX2sUrQDmFc3jR5i/C7"
       crossorigin="anonymous">
-   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.5.0/marked.min.js" integrity="sha256-EMpcK4NfvalbB1sgBcpfS+POwc4F08hY3i3RVksd9Dw="
-      crossorigin="anonymous"></script>
 
    <link rel="stylesheet" href="wiktor/theme.css">
 
+   <!-- Code highlighter -->
+   <script src='https://gitcdn.link/repo/wiktor-wiki/langue/master/langue.js'></script>
+
    <!-- Uncomment for Remote up-to-date version -->
-   <script src="https://rawgit.com/wiktor-wiki/wiktor/master/wiktor/wiktor.js"></script>
+   <script src="https://gitcdn.link/repo/wiktor-wiki/wiktor/master/wiktor/wiktor.js"></script>
+   <script src="https://gitcdn.link/repo/wiktor-wiki/wiktor/master/wiktor/controls.js"></script>
 
    <!-- Uncomment for Local constant version -->
    <!-- <script src="wiktor/wiktor.js"></script> -->
+   <!-- <script src="wiktor/controls.js"></script> -->
 </head>
 
-<body style="display: none" id='head'>
+<body style="display: none" id="head">
    <nav>
       <links>
       </links>
-
-      <span id='w-version'>
-         <a href="javascript:toggleTheme();" class="fas fa-palette"></a>
+      <span id='controls'>
       </span>
    </nav>
 
    <content>
       <script>wiktor('wiktor');</script>
+      <div id='empty' style="display:none">
+         <div class='message'>
+            <h1>Oh No!</h1>
+            <p>
+               It appears this wiki is empty!
+            </p>
+         </div>
+      </div>
    </content>
 
-   <a class='go-top fas fa-chevron-circle-up' href='#head'></a>
+   <a class='go-top fas fa-angle-up' href='#head'></a>
 
-   <div id='empty' style="display:none">
-      <div class='message'>
-         <h1>Oh No!</h1>
-         <p>
-            It appears this wiki is empty!
-         </p>
-      </div>
-   </div>
 </body>
 
 </html>

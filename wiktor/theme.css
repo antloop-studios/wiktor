@@ -2,24 +2,28 @@
 
 .light, :root {
    --font-code: "Fira Code";
-   --font-text: "Fira Code";
-   --fg-primary: #444;
+   --font-text: "Montserrat";
+   --fg-primary: #212121;
    --bg-primary: #fff;
-   --fg-secondary: #fff;
-   --bg-secondary: #444;
-   --accent: #0091EA;
-   --c-string: #7cb342;
-   --c-keyword: #d81b60;
-   --c-comment: #888;
-   --c-punctuation: #039be5;
+   --fg-secondary: #212121;
+   --bg-secondary: #fff;
+   --accent: #212121;
+   --entry-border: 0 0 1px 0 var(--fg-secondary);
+   --c-string: #37bc98;
+   --c-keyword: #e9573f;
+   --c-comment: #ccd1d9;
+   --c-punctuation: #ccd1d9;
 }
 
 .dark {
    --fg-primary: #ccc;
-   --bg-primary: #1e1e1e;
+   --bg-primary: #212121;
    --fg-secondary: #ccc;
-   --bg-secondary: #151515;
-   --accent: #0091EA;
+   --bg-secondary: #212121;
+   --accent: #fff;
+   --c-comment: #656d78;
+   --c-punctuation: #656d78;
+   --entry-border: 0 0 1px 0 var(--fg-secondary);
 }
 
 /* Responsive -------------------------------------------------------------- */
@@ -31,9 +35,18 @@
 /* Mobile */
 
 @media only screen and (max-width: 767px) {
+   body {
+      display: block;
+      overflow: auto;
+      text-align: left;
+      height: auto;
+      font-size: 11pt;
+      margin: 0;
+      margin-bottom: 40px;
+   }
    nav, nav links, content {
       width: 100%;
-      overflow: hidden;
+      /* overflow: hidden; */
       height: auto;
    }
    content entry {
@@ -42,23 +55,73 @@
    }
    content entry h1.header {
       margin: -20px 0;
-   }
-   body {
-      display: block;
-      overflow: auto;
-      text-align: left;
-      height: auto;
+      padding: 10px 0;
    }
    .go-top {
       color: var(--fg-primary);
       background: var(--bg-primary);
       position: fixed;
-      right: 10px;
-      bottom: 10px;
+      right: 20px;
+      bottom: 20px;
       font-size: 30pt;
       border-radius: 999px;
       opacity: 1;
+      border: 1px solid;
+      width: 50px;
+      height: 50px;
       z-index: 99;
+      display: flex;
+   }
+   .go-top::before {
+      margin: auto;
+   }
+   h1 {
+      font-size: 19pt;
+   }
+   h2 {
+      font-size: 19pt;
+   }
+   h3 {
+      font-size: 17pt;
+   }
+   h4 {
+      font-size: 15pt;
+   }
+   h5 {
+      font-size: 13pt;
+   }
+   h6 {
+      font-size: 11pt;
+   }
+   .options {
+      top: 1em;
+   }
+   #controls {
+      z-index: 99;
+   }
+   .table-box table {
+      width: 99%;
+   }
+   thead {
+      display: none;
+   }
+   td {
+      display: flex;
+      text-align: left;
+      word-break: break-all;
+   }
+   tr {
+      border-bottom: 1px solid var(--accent);
+   }
+   tr:last-child {
+      border-bottom: none;
+   }
+   .rd-th {
+      font-weight: bold;
+      display: flex;
+      min-width: 33%;
+      width: 33%;
+      padding-right: 10px;
    }
 }
 
@@ -67,16 +130,17 @@
 @media only screen and (min-width: 767px) {
    body {
       display: flex;
-      flex-flow: row wrap;
       overflow: hidden;
       text-align: justify;
       height: 100%;
+      font-size: 12pt;
+      margin: 0;
    }
    nav {
-      width: 33.33%;
+      min-width: 300px;
    }
    content {
-      width: 66.66%;
+      flex-grow: 1;
    }
    nav, nav links, content {
       overflow: auto;
@@ -88,62 +152,56 @@
    }
    content entry h1.header {
       margin: -20px;
+      padding: 10px 20px;
    }
    .go-top {
       display: none;
    }
-}
-
-@media only screen and (min-width: 1024px) {
-   body {
-      display: flex;
-      flex-flow: row wrap;
-      overflow: hidden;
-      text-align: justify;
-      height: 100%;
+   h1 {
+      font-size: 23pt;
    }
-   nav {
-      width: 16.66%;
+   h2 {
+      font-size: 21pt;
    }
-   content {
-      width: 83.33%;
+   h3 {
+      font-size: 19pt;
    }
-   nav, nav links, content {
-      overflow: auto;
-      height: 100%;
+   h4 {
+      font-size: 17pt;
    }
-   content entry {
-      margin: 10px;
-      padding: 20px;
+   h5 {
+      font-size: 14pt;
    }
-   content entry h1.header {
-      margin: -20px;
+   h6 {
+      font-size: 12pt;
    }
-   .go-top {
+   .options {
+      bottom: 0;
+   }
+   .table-box table {
+      width: 99%;
+   }
+   th, td {
+      border-right: 1px solid var(--accent);
+   }
+   th:last-child, td:last-child {
+      border-right: none;
+   }
+   .rd-th {
       display: none;
    }
 }
 
 /* Main -------------------------------------------------------------------- */
 
-html {
-   background: var(--bg-secondary);
-}
-
 body {
    background: var(--bg-secondary);
    font-family: var(--font-text);
-   margin: 0;
 }
 
 #empty {
    display: flex;
-   position: absolute;
-   z-index: 99999;
-   top: 0;
-   bottom: 0;
-   left: 0;
-   right: 0;
+   height: 100%;
    background: var(--bg-primary);
 }
 
@@ -185,24 +243,28 @@ nav {
 }
 
 nav links {
-   margin-left: 10px;
+   padding-left: 10px;
 }
 
 nav a {
    color: var(--fg-secondary);
 }
 
+nav a i.fa {
+   display: flex;
+}
+
+nav a i.fa::before {
+   margin: auto 0;
+   margin-left: -1em;
+}
+
 nav links ul {
    padding-left: 0px;
 }
 
-nav links ul ul {
+nav links ul ul :not(:first-child) {
    padding-bottom: 5px;
-}
-
-nav links ul>li {
-   /* list-style-type: disclosure-open; */
-   list-style-type: disc;
 }
 
 nav links li {
@@ -216,21 +278,6 @@ nav links a {
    padding: 5px;
 }
 
-nav #w-version {
-   display: flex;
-   flex-flow: row;
-   margin-top: auto;
-   padding: 5px;
-}
-
-nav #w-version a {
-   margin: auto 0;
-}
-
-nav #w-version a:first-child {
-   margin-right: auto;
-}
-
 /* Content ----------------------------------------------------------------- */
 
 content {
@@ -241,7 +288,7 @@ content {
 
 content entry {
    background: var(--bg-primary);
-   box-shadow: 0 0 10px -5px var(--fg-secondary);
+   box-shadow: var(--entry-border);
    display: block;
 }
 
@@ -252,12 +299,11 @@ content entry h1.header {
    position: sticky;
    top: 0px;
    font-weight: 600;
-   padding: 10px 20px;
    margin-bottom: 0;
    z-index: 1;
 }
 
-content entry>h1>a {
+content entry a.anchor {
    position: relative;
    top: -3em;
 }
@@ -280,8 +326,10 @@ content entry img {
    max-width: 100%;
 }
 
-content entry pre {
-   white-space: pre-wrap;
+content entry blockquote {
+   border-left: 2px solid var(--accent);
+   padding: 0 10px;
+   border-radius: -4px;
 }
 
 content entry li {
@@ -298,28 +346,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-   font-size: 23pt;
    text-transform: uppercase;
-}
-
-h2 {
-   font-size: 21pt;
-}
-
-h3 {
-   font-size: 19pt;
-}
-
-h4 {
-   font-size: 17pt;
-}
-
-h5 {
-   font-size: 14pt;
-}
-
-h6 {
-   font-size: 12pt;
 }
 
 .table-box {
@@ -330,11 +357,9 @@ h6 {
    color: var(--fg-primary);
    margin: 20px auto;
    border-collapse: collapse;
-   width: 95%;
 }
 
 th, td {
-   border-right: 1px solid var(--accent);
    padding: 5px;
    min-width: 125px;
 }
@@ -343,23 +368,18 @@ th {
    color: var(--accent);
 }
 
-th:last-child, td:last-child {
-   border-right: none;
-}
-
 pre {
    border-left: 2px solid var(--accent);
    border-right: 2px solid var(--accent);
    padding: 10px;
-   border-radius: 4px;
+   border-radius: 0px;
+   white-space: pre-wrap;
 }
 
 code {
-   border-left: 2px solid var(--accent);
-   border-right: 2px solid var(--accent);
-   font-size: 12pt;
+   border-bottom: 1px dotted var(--accent);
    padding: 1px 3px;
-   border-radius: 4px;
+   border-radius: 8px;
 }
 
 pre code {
@@ -384,4 +404,74 @@ code .punctuation {
 
 code .keyword {
    color: var(--c-keyword);
+}
+
+/* Controls ----------------------------------------------------------------- */
+
+#controls {
+   display: flex;
+   flex-flow: row;
+   margin-top: auto;
+   padding: 5px;
+}
+
+#controls #version {
+   margin-left: auto;
+}
+
+#controls .control {
+   color: var(--fg-secondary);
+   margin: auto 0;
+   margin-left: 10px;
+}
+
+#controls .control::before {
+   opacity: 0.5;
+}
+
+#controls .control:hover {
+   cursor: pointer;
+}
+
+#controls .control:hover::before {
+   opacity: 1;
+}
+
+.menu {
+   background-color: var(--bg-secondary);
+   display: flex;
+   flex-flow: column-reverse;
+}
+
+.menu input[type="radio"] {
+   display: none;
+}
+
+.pointer:hover {
+   cursor: pointer;
+}
+
+.menu input[type="radio"]:checked+label {
+   opacity: 1;
+}
+
+.menu label {
+   background-color: var(--bg-secondary);
+   color: var(--fg-secondary);
+   margin: auto;
+   opacity: .5;
+   display: flex;
+   padding: 5px 10px;
+   text-align: center;
+}
+
+.menu label:hover {
+   opacity: 1;
+   cursor: pointer;
+}
+
+.options {
+   position: absolute;
+   border: 1px solid;
+   background-color: var(--bg-secondary);
 }

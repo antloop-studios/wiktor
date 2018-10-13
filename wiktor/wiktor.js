@@ -4,182 +4,60 @@
 */
 
 "use strict";
+var version = "0.4.0";
 
+var list_opened = "fa fa-caret-down";
+var list_closed = "fa fa-caret-right";
+var expand_lock = false; // force expand tree
+
+var mobile_width = 767;
 var fadetime = 100;
-var pathsep = ":";
-var subsep = "|";
-var cache = {};
+
+var pathpref = "?";
+var pathsep = "&";
+var subsep = "#";
 var indexfile = "index";
-var version = "0.3.4";
+var cache = {};
 
-function toggleTheme() {
-   localStorage.setItem(
-      "theme",
-      localStorage.getItem("theme") == "dark" ? "light" : "dark"
-   );
-   $("body").attr("class", localStorage.getItem("theme"));
-}
-
-function findall(regex_pattern, string_, typename) {
-   var output_list = [];
-
-   while (true) {
-      var a_match = regex_pattern.exec(string_);
-      if (a_match) {
-         output_list.push([
-            typename,
-            a_match[1],
-            a_match.index + (a_match[0].length - a_match[1].length),
-         ]);
-      } else {
-         break;
-      }
-   }
-
-   return output_list;
-}
-
-function process(source, tokens, i = 0, last = 0) {
-   return tokens[i]
-      ? source.slice(last, tokens[i][2]) +
-           "<span class='" +
-           tokens[i][0] +
-           "'>" +
-           htmlEscape(tokens[i][1]) +
-           "</span>" +
-           process(source, tokens, i + 1, tokens[i][2] + tokens[i][1].length)
-      : "";
-}
-
-function compose(source, tokens) {
-   for (var typea = 3; typea > 0; typea--) {
-      for (var typeb = typea - 1; typeb >= 0; typeb--) {
-         for (var itema = 0; tokens[typea][itema]; itema++) {
-            for (var itemb = 0; tokens[typeb][itemb]; itemb++) {
-               if (
-                  !(
-                     tokens[typea][itema][2] > tokens[typeb][itemb][2] ||
-                     tokens[typea][itema][2] + tokens[typea][itema][1].length <
-                        tokens[typeb][itemb][2] + tokens[typeb][itemb][1].length
-                  )
-               ) {
-                  tokens[typeb][itemb] = ["", "", 0];
-               }
-            }
-         }
-      }
-   }
-   return process(
-      source.innerText,
-      []
-         .concat(...tokens)
-         .filter(e => e[0])
-         .sort((a, b) => (a[2] >= b[2] ? 1 : -1))
-   );
-}
-
-function regEscape(unsafe) {
-   return unsafe.replace(new RegExp("[.*+?^${}()|[\\]\\\\]", "g"), "\\$&");
-}
-
-function htmlEscape(unsafe) {
-   return unsafe
-      .replace(new RegExp("&", "g"), "&amp;")
-      .replace(new RegExp("<", "g"), "&lt;")
-      .replace(new RegExp(">", "g"), "&gt;")
-      .replace(new RegExp('"', "g"), "&quot;")
-      .replace(new RegExp("'", "g"), "&#039;");
-}
-
-function loadLanguage(language, success) {
-   language =
-      "https://raw.githubusercontent.com/wiktor-wiki/languages/master/" +
-      language.replace("language-", "") +
-      ".json";
-
-   return $.getJSON(language, { _: $.now() }, function(data) {
-      data.keywords = new RegExp(data.keywords, "gm");
-
-      data.punctuation = new RegExp(
-         "(" +
-            data.punctuation
-               .split("")
-               .map(regEscape)
-               .join("|") +
-            ")",
-         "gm"
-      );
-
-      data.comment = new RegExp(
-         "(" +
-            data.comment
-               .map(pair => "(?:" + pair[0] + "(?:.|\\s)*?" + pair[1] + ")")
-               .join("|") +
-            ")",
-         "gm"
-      );
-
-      data.string = new RegExp(
-         "(" +
-            data.string
-               .map(
-                  pair =>
-                     "(?:" +
-                     regEscape(pair[0]) +
-                     "(?:\\\\\\\\|\\\\" +
-                     regEscape(pair[1]) +
-                     "|.|\\s)*?" +
-                     regEscape(pair[1]) +
-                     ")"
-               )
-               .join("|") +
-            ")",
-         "gm"
-      );
-
-      success(data);
-   });
-}
-
-function highlight(code) {
-   if (code.className) {
-      loadLanguage(code.className, function(lang) {
-         var keywords = findall(lang.keywords, code.innerText, "keyword");
-         var punctuation = findall(
-            lang.punctuation,
-            code.innerText,
-            "punctuation"
-         );
-         var comments = findall(lang.comment, code.innerText, "comment");
-         var strings = findall(lang.string, code.innerText, "string");
-
-         code.innerHTML = compose(
-            code,
-            [punctuation, keywords, strings, comments]
-         );
-      });
-   }
+function nullAnchor(path) {
+   return "<a onclick='return false' href='" + path + "'>";
 }
 
 function checkpath(a, b, elem) {
    var apath = a.split(subsep)[0].split(pathsep);
    var bpath = b.split(subsep)[0].split(pathsep);
+
    for (var i = 0; i < apath.length; i++) {
       if (apath[i] != bpath[i]) {
          return $("a", elem).filter((_, e) => e.name == a).length > 0;
       }
    }
+
    return true;
 }
 
 function openpath(path) {
    var all = $("entry").filter((_, e) => checkpath(path, e.id, e));
+
    all.filter(":hidden").appendTo("content");
    all.fadeIn(fadetime, function() {
-      if ($("[name='" + path + "']")[0])
-         $("[name='" + path + "']")[0].scrollIntoView();
-      else if (all[0]) all[0].scrollIntoView();
+      ($("[id='" + path + "']")[0] || all[0]).scrollIntoView();
    });
+
+   var expandable = path.split(subsep)[0].split(pathsep);
+
+   while (expandable.length > 0) {
+      var name = expandable.pop();
+
+      var elem = $("[name='" + name + "']");
+      elem = elem.length ? elem : $("[name='" + name + ":index']");
+      var list = elem.siblings("ul");
+      var icon = $("i.fa", elem);
+
+      list.show();
+      icon.removeClass(list_closed);
+      icon.addClass(list_opened);
+   }
 }
 
 function mkpath(path, key = "") {
@@ -231,21 +109,38 @@ function mktree(entries, path = []) {
          var inner = $("<li></li>");
 
          var link = mkpath(path, key);
-         var index = entries[key].indexOf(indexfile);
 
-         if (index > -1) {
-            link += pathsep + indexfile;
-            entries[key].splice(index, 1);
-         }
+         $(
+            "<a class='pointer' name='" +
+               key +
+               "'><i class='" +
+               (expand_lock ? list_opened : list_closed) +
+               "'/>" +
+               key.replace("_", " ") +
+               "</a>"
+         )
+            .on("click", e => {
+               if (expand_lock) return;
 
-         $("<a href='#" + link + "'>" + key + "</a>")
-            .on("click", () => mkentry(link, openpath))
+               var list = $(e.target).siblings("ul");
+               var icon = $("i.fa", e.target);
+
+               list.toggle();
+
+               if (list.is(":visible")) {
+                  icon.removeClass(list_closed);
+                  icon.addClass(list_opened);
+               } else {
+                  icon.removeClass(list_opened);
+                  icon.addClass(list_closed);
+               }
+            })
             .appendTo(inner);
 
-         cache[link] = false;
-
          path.push(key);
-         mktree(entries[key], path).appendTo(inner);
+         mktree(entries[key], path)
+            .hide()
+            .appendTo(inner);
          path.pop();
 
          inner.appendTo(chunk);
@@ -254,8 +149,16 @@ function mktree(entries, path = []) {
       path = mkpath(path, entries);
       cache[path] = false;
 
-      chunk = $("<a href='#" + path + "'><li>" + entries + "</li></a>")
-         .on("click", () => mkentry(path, openpath))
+      chunk = $(
+         nullAnchor(pathpref + path) +
+            "<li>" +
+            entries.replace("_", " ") +
+            "</li></a>"
+      )
+         .on("click", () => {
+            history.pushState("", "", pathpref + path);
+            mkentry(path, openpath);
+         })
          .appendTo(chunk);
    }
 
@@ -263,98 +166,131 @@ function mktree(entries, path = []) {
 }
 
 function mkentry(path, after) {
-   Object.keys(cache)
-      .filter(e => e.startsWith(path))
-      .forEach(path => {
-         if (cache[path]) {
-            if (after) after(path);
-            return;
-         }
-         cache[path] = true;
-         $.get(
-            "entries/" + path.replace(new RegExp(pathsep, "g"), "/") + ".md",
-            { _: $.now() },
-            function(entry) {
-               var title = path
-                  .replace(pathsep + indexfile, "")
-                  .replace(new RegExp(pathsep, "g"), " · ");
+   if (cache[path]) {
+      if (after) after(path);
+      return;
+   }
 
-               var entryHtml = $(
-                  "<entry id='" +
-                     path +
-                     "' style='display:none'>" +
-                     "<h1 class='header'>" +
-                     title +
-                     "<close></close></h1>" +
-                     marked(entry) +
-                     "</entry>"
-               ).appendTo("content");
+   var entry_root = localStorage.getItem("entry_root") || "";
 
-               $("code", entryHtml).each((_, code) => highlight(code));
+   cache[path] = true;
+   $.get(
+      "entries/" +
+         entry_root +
+         "/" +
+         path.replace(new RegExp(pathsep, "g"), "/") +
+         ".md",
+      { _: $.now() },
+      function(entry) {
+         var title = path
+            .replace(entry_root + "&", "")
+            .replace(new RegExp(pathsep, "g"), " · ")
+            .replace("_", " ");
 
-               $("a", entryHtml)
-                  .filter(
-                     (_, a) =>
-                        a.hash != "" &&
-                        !a.attributes["href"].value.startsWith("/")
-                  )
-                  .each(
-                     (_, e) => (e.hash = "#" + path + subsep + e.hash.substr(1))
+         var link = $("<h1 class='header'>").append(
+            $(nullAnchor(pathpref + path) + title + "</a><close></close>").on(
+               "click",
+               () => history.pushState("", "", pathpref + path)
+            )
+         );
+
+         var entryHtml = $(
+            "<entry id='" +
+               path +
+               "' style='display:none'>" +
+               "" +
+               marked(entry) +
+               "</entry>"
+         );
+         link.prependTo(entryHtml);
+         entryHtml.appendTo("content");
+
+         $("code", entryHtml).each((_, code) => highlight(code));
+
+         var entry_links = $("a", entryHtml)
+            .filter((_, e) => !e.hash && e.href.split("?")[1])
+            .attr("onclick", "return false");
+
+         entry_links.each((_, e) => {
+            $(e).click(() => {
+               mkentry(e.href.split("?")[1], openpath);
+               history.pushState("", "", pathpref + e.href.split("?")[1]);
+            });
+         });
+
+         var anchors = $("a", entryHtml)
+            .filter((_, e) => e.hash)
+            .each((_, e) => {
+               $(e).attr("onclick", "return false");
+               $(e).click(() => {
+                  var el = $(e.hash)[0];
+                  el.scrollIntoView();
+                  $("content")[0].scrollBy(
+                     0,
+                     -$(e)
+                        .closest("entry")
+                        .children(".header")
+                        .outerHeight()
                   );
+                  $("body")[0].scrollBy(
+                     0,
+                     -$(e)
+                        .closest("entry")
+                        .children(".header")
+                        .outerHeight()
+                  );
+               });
+            });
 
-               $("a", entryHtml)
-                  .filter(
-                     (_, a) =>
-                        a.hash != "" &&
-                        a.attributes["href"].nodeValue.startsWith("/")
-                  )
-                  .each((_, e) => {
-                     e.attributes["href"].value = e.attributes[
-                        "href"
-                     ].value.substr(1);
-
-                     $(e).on("click", () =>
-                        mkentry(e.hash.substr(1), openpath)
+         $("table", entryHtml)
+            .wrap("<div class='table-box'>")
+            .each((_, e) => {
+               var titles = $("th", $("thead", e)).map((_, e) => e.textContent);
+               $("tr", $("tbody", e)).each((_, e) => {
+                  $("td", e).each((i, e) => {
+                     $(e).prepend(
+                        $("<div class='rd-th'>" + titles[i] + "</div>")
                      );
                   });
-
-               $("a", entryHtml)
-                  .filter((_, a) => a.name != "")
-                  .each((_, e) => (e.name = path + subsep + e.name));
-
-               $("table", entryHtml).wrap("<div class='table-box'>");
-
-               $("close", entryHtml).on("click", function() {
-                  entryHtml.fadeOut(fadetime);
                });
+            });
 
-               if (after) after(path);
-            }
-         );
-      });
+         $("close", entryHtml).on("click", function() {
+            entryHtml.fadeOut(fadetime);
+         });
+
+         if (after) $(() => after(path));
+      }
+   );
 }
 
 function wiktor(landing) {
    $.getJSON("wiktor/entries.json", { _: $.now() }, entries => {
       $("body").attr("class", localStorage.getItem("theme") || "light");
 
-      mktree(preptree(entries)).appendTo("links");
+      var entry_root = localStorage.getItem("entry_root");
+      var tree = preptree(entries);
+      tree = entry_root ? tree[0][entry_root] : tree;
 
-      var hashpath = window.location.hash.substr(1);
+      if (tree) {
+         mktree(tree).appendTo("links");
 
-      if (hashpath.split(subsep)[0])
-         mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
-      else if (landing) mkentry(landing, openpath);
+         var hashpath = decodeURI(window.location.href.split(pathpref)[1]);
 
-      $(() =>
-         $(
-            "<a href='https://github.com/wiktor-wiki/wiktor'>Wiktor " +
-               version +
-               "</a>"
-         ).appendTo("#w-version")
-      );
+         if (hashpath)
+            mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
+         else if (landing) mkentry(landing, openpath);
 
-      if ($("links ul")[0].childElementCount == 0) {
+         $(() => {
+            $(
+               "<a id='version' href='https://github.com/wiktor-wiki/wiktor'>Wiktor " +
+                  version +
+                  "</a>"
+            ).appendTo("#controls");
+         });
+      }
+
+      if ($("links ul")[0] && $("links ul")[0].childElementCount == 0) {
          $("#empty").show();
       }
       $("body").fadeIn(fadetime);
