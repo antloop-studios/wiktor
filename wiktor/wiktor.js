@@ -204,8 +204,9 @@ function mkentry(path, after) {
          );
          link.prependTo(entryHtml);
          entryHtml.appendTo("content");
-
-         $("code", entryHtml).each((_, code) => highlight(code));
+         $("code", entryHtml).each(
+            (_, code) => typeof highlight != "undefined" && highlight(code)
+         );
 
          var entry_links = $("a", entryHtml)
             .filter((_, e) => !e.hash && e.href.split("?")[1])
