@@ -4,7 +4,7 @@
 */
 
 "use strict";
-var version = "0.4.1";
+var version = "0.4.2";
 
 var list_opened = "fa fa-caret-down";
 var list_closed = "fa fa-caret-right";
