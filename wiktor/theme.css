@@ -20,7 +20,7 @@
    --bg-primary: #212121;
    --fg-secondary: #ccc;
    --bg-secondary: #212121;
-   --accent: #fff;
+   --accent: #4a9;
    --c-comment: #656d78;
    --c-punctuation: #656d78;
    --entry-border: 0 0 1px 0 var(--fg-secondary);
@@ -106,12 +106,15 @@
       display: none;
    }
    td {
-      display: flex;
       text-align: left;
       word-break: break-all;
+      padding: 10px 0;
+      margin-bottom: 10px;
    }
    tr {
-      border-bottom: 1px solid var(--accent);
+      display: flex;
+      flex-flow: column;
+      padding-bottom: 10px;
    }
    tr:last-child {
       border-bottom: none;
@@ -122,6 +125,8 @@
       min-width: 33%;
       width: 33%;
       padding-right: 10px;
+      float: left;
+      height: 101%
    }
 }
 
@@ -180,12 +185,6 @@
    }
    .table-box table {
       width: 99%;
-   }
-   th, td {
-      border-right: 1px solid var(--accent);
-   }
-   th:last-child, td:last-child {
-      border-right: none;
    }
    .rd-th {
       display: none;
@@ -360,12 +359,20 @@ h1 {
 }
 
 th, td {
-   padding: 5px;
+   padding: 10px 5px;
    min-width: 125px;
 }
 
 th {
    color: var(--accent);
+}
+
+thead {
+   border-bottom: 1px solid var(--accent);
+}
+
+tr {
+   box-shadow: 0 2px 1px -2px var(--accent);
 }
 
 pre {
@@ -377,9 +384,8 @@ pre {
 }
 
 code {
-   border-bottom: 1px dotted var(--accent);
-   padding: 1px 3px;
-   border-radius: 8px;
+   font-size: 12pt;
+   color: var(--accent);
 }
 
 pre code {
