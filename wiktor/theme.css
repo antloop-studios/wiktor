@@ -362,6 +362,7 @@ th, td {
 
 th {
    color: var(--accent);
+   text-align: left;
 }
 
 thead {
