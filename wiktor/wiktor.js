@@ -175,8 +175,6 @@ function mktree(entries, path = []) {
 }
 
 function mkentry(path, after) {
-   path = path.toLowerCase();
-
    if (cache[path]) {
       if (after) after(path);
       return;
