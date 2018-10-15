@@ -4,7 +4,7 @@
 */
 
 "use strict";
-var version = "0.4.2";
+var version = "0.4.3";
 
 var list_opened = "fa fa-caret-down";
 var list_closed = "fa fa-caret-right";
@@ -13,6 +13,7 @@ var expand_lock = false; // force expand tree
 var mobile_width = 767;
 var fadetime = 100;
 
+var titlesep = " · ";
 var pathpref = "?";
 var pathsep = "&";
 var subsep = "#";
@@ -191,10 +192,9 @@ function mkentry(path, after) {
          ".md",
       { _: $.now() },
       function(entry) {
-         var title = path
-            .replace(entry_root + "&", "")
-            .replace(new RegExp(pathsep, "g"), " · ")
-            .replace("_", " ");
+         var title = path.replace(new RegExp(pathsep, "g"), titlesep);
+         if (entry_root.length > 0) title.replace(entry_root + titlesep, "");
+         title.replace("_", " ");
 
          var link = $("<h1 class='header'>").append(
             $(nullAnchor(pathpref + path) + title + "</a><close></close>").on(
