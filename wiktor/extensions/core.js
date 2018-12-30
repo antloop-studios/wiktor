@@ -172,7 +172,6 @@ Wiktor.addStep([
 
             if (parts[1]) {
                this.lock("loadEntries");
-               console.log(this.storage.cache.entries);
 
                Fetch(this.entry.root + this.storage.root + entry, {
                   alias: "/" + parts[0] + "/",
@@ -187,7 +186,7 @@ Wiktor.addStep([
                               data
                         );
                      }
-                     console.log(this.storage.cache.entries);
+
                      this.unlock("loadEntries");
                   },
                   fail: () => this.unlock("loadEntries"),
