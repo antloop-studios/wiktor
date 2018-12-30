@@ -1,302 +1,330 @@
-/*
-   Daniels Kursits (evolbug) 2018
-   MIT license
-*/
+/**
+ * @author Daniels Kursits (evolbug) <https://github.com/evolbug>
+ * @license MIT
+ * @version 0.5.0
+ */
 
 "use strict";
-var version = "0.4.3";
 
-var list_opened = "fa fa-caret-down";
-var list_closed = "fa fa-caret-right";
-var expand_lock = false; // force expand tree
+function Fetch(url, params = {}) {
+   var req = new XMLHttpRequest();
+   if (params.cache === undefined) params.cache = {};
+   if (params.done === undefined) params.done = () => {};
+   if (params.fail === undefined) params.fail = () => {};
+   if (params.alias === undefined) params.alias = url;
 
-var mobile_width = 767;
-var fadetime = 100;
-
-var titlesep = " · ";
-var pathpref = "?";
-var pathsep = "&";
-var subsep = "#";
-var indexfile = "index";
-var cache = {};
-
-function nullAnchor(path) {
-   return "<a onclick='return false' href='" + path + "'>";
-}
-
-function checkpath(a, b, elem) {
-   var apath = a.split(subsep)[0].split(pathsep);
-   var bpath = b.split(subsep)[0].split(pathsep);
-
-   for (var i = 0; i < apath.length; i++) {
-      if (apath[i] != bpath[i]) {
-         return $("a", elem).filter((_, e) => e.name == a).length > 0;
-      }
-   }
-
-   return true;
-}
-
-function scrollUnderHeader(item) {
-   item.scrollIntoView();
-   var offset = -$(item)
-      .closest("entry")
-      .children(".header")
-      .outerHeight();
-
-   $("content")[0].scrollBy(0, offset);
-   $("body")[0].scrollBy(0, offset);
-}
-
-function openpath(path) {
-   var all = $("entry").filter((_, e) => checkpath(path, e.id, e));
-
-   all.filter(":hidden").appendTo("content");
-   all.fadeIn(fadetime, function() {
-      scrollUnderHeader($("[id='" + path.split(subsep)[1] + "']")[0] || all[0]);
-   });
-
-   var expandable = path.split(subsep)[0].split(pathsep);
-
-   while (expandable.length > 0) {
-      var name = expandable.pop();
-
-      var elem = $("[name='" + name + "']");
-      elem = elem.length ? elem : $("[name='" + name + ":index']");
-      var list = elem.siblings("ul");
-      var icon = $("i.fa", elem);
-
-      list.show();
-      icon.removeClass(list_closed);
-      icon.addClass(list_opened);
-   }
-}
-
-function mkpath(path, key = "") {
-   path = path.join(pathsep);
-   path = (path.length > 0 && path + pathsep) || "";
-   return path + key;
-}
-
-function preptree(paths) {
-   paths.sort();
-   var tree = [{}];
-
-   paths.forEach(path => {
-      var segments = path.split("/");
-      var level = tree;
-
-      segments.forEach(seg => {
-         var existingPath = level[0][seg];
-
-         if (existingPath) {
-            level = existingPath;
-         } else if (seg.endsWith(".md")) {
-            level.push(seg.replace(".md", ""));
+   req.onreadystatechange = () => {
+      if (req.readyState === XMLHttpRequest.DONE) {
+         if (req.status == 200) {
+            params.cache[params.alias] = {
+               etag: req.getResponseHeader("etag"),
+               date: req.getResponseHeader("last-modified"),
+               data: req.responseText,
+            };
+            params.done(req.responseText, req);
+         } else if (req.status == 304) {
+            params.done(params.cache[params.alias].data, req);
          } else {
-            level[0][seg] = [{}];
-            level = level[0][seg];
+            params.fail(req);
+         }
+      }
+   };
+
+   req.open("GET", url, params.async || true);
+
+   if (params.cache[params.alias]) {
+      req.setRequestHeader("If-None-Match", params.cache[params.alias].etag);
+   } else if (params.cache === false) {
+      req.setRequestHeader("Cache-Control", "no-cache");
+   }
+
+   if (params.contentType)
+      req.setRequestHeader("Content-Type", params.contentType);
+
+   req.send();
+}
+
+// persistent localStorage
+function Persistor(key) {
+   var old = JSON.parse(localStorage[key] || "{}");
+   this.getKey = () => key;
+   this.restore = key => old[key];
+   delete localStorage[key];
+}
+
+Persistor.prototype.store = function(key, value) {
+   if (key) this[key] = value;
+   localStorage[this.getKey()] = JSON.stringify(this);
+};
+
+function Wiktor(landing, title = "Wiktor") {
+   this.storage = new Persistor(title);
+
+   this.storage.version = "0.5.0";
+   this.github = "https://github.com/wiktor-wiki/wiktor";
+
+   // virtual entry root, useful for implementing localisation/versioning/etc
+   this.storage.root = this.storage.restore("root") || "";
+
+   this.storage.cache =
+      (this.storage.restore("version") == this.storage.version &&
+         this.storage.restore("cache")) ||
+      {};
+   this.storage.cache.core = this.storage.cache.core || {};
+   this.storage.cache.entries = this.storage.cache.entries || {};
+   this.storage.cache.extensions = this.storage.cache.extensions || {};
+
+   this.storage.theme = this.storage.restore("theme") || "dark";
+
+   this.notFound = {
+      date: "Non, 00 Nul 0000 00:00:00 GMT",
+      data:
+         "<div id='not-found'>\
+            <img src='https://i.imgur.com/Ulp2hk1.png' width='190px'/>\
+            <h1>404</h1>\
+            <div>Oh no, entry appears to be misplaced or missing</div>\
+         </div>",
+   };
+
+   this.storage.store();
+
+   this.entry = {
+      root: "/entries/", // real entry root, don't change unless you want to store them elsewhere entirely
+      list: "/wiktor/entries.json",
+   };
+   this.landing =
+      "/" + landing.replace(new RegExp("^[/]+|[/]+$", "g"), "") + "/";
+   this.title = title;
+
+   this.nav = {
+      opened: "fa fa-angle-down",
+      closed: "fa fa-angle-right",
+      is_locked: false, // force expanded navigation
+   };
+
+   this.layout =
+      "<aside>\
+         <nav></nav>\
+         <footer>\
+            <popups></popups>\
+            <widgets>\
+               <div class='left'></div>\
+               <div class='center'></div>\
+               <div class='right'></div>\
+            </widgets>\
+         </footer>\
+      </aside>\
+      <main id='top'></main>\
+      <a class='go-top fas fa-angle-up' href='#top'/>";
+
+   this.locks = {}; // locks for steps to wait for
+}
+
+$.extend(Wiktor, {
+   extensionPath: "/wiktor/extensions/",
+   extensionRegistry: "/wiktor/extensions/register.json",
+   steps: [],
+   widgets: [],
+   processors: {},
+   postProcessors: [],
+
+   addWidget: function(widget) {
+      if (Array.isArray(widget)) {
+         widget.forEach(widget => this.addWidget(widget));
+         return this;
+      }
+
+      this.widgets.push(widget);
+      return this;
+   },
+
+   addStep: function(step) {
+      if (Array.isArray(step)) {
+         step.forEach(step => this.addStep(step));
+         return this;
+      }
+
+      var name = Object.keys(step).find(
+         key => ["waitFor", "before", "after", "preload"].indexOf(key) < 0
+      );
+      step.name = name;
+
+      if (this.steps.findIndex(s => s.name == step.name) >= 0) {
+         console.log("step with name '" + step.name + "' already defined");
+         return this;
+      }
+
+      if (step.after)
+         this.steps.splice(
+            this.steps.findIndex(s => s.name == step.after) >= 0
+               ? this.steps.findIndex(s => s.name == step.after) + 1
+               : this.steps.length,
+            0,
+            step
+         );
+      else if (step.before)
+         this.steps.splice(
+            this.steps.findIndex(s => s.name == step.before) >= 0
+               ? this.steps.findIndex(s => s.name == step.before)
+               : this.steps.length,
+            0,
+            step
+         );
+      else this.steps.push(step);
+
+      return this;
+   },
+
+   removeStep: function(name) {
+      this.steps.splice(this.steps.findIndex(s => s.name == name), 1);
+   },
+});
+
+$.extend(Wiktor.prototype, {
+   steps: Wiktor.steps,
+   addStep: Wiktor.addStep,
+   removeStep: Wiktor.removeStep,
+   addWidget: Wiktor.addWidget,
+   widgets: [],
+
+   lock: function(lock) {
+      if (!this.locks[lock]) this.locks[lock] = { handles: 1, done: [] };
+      else this.locks[lock].handles += 1;
+      console.log(
+         "%clock #" + this.locks[lock].handles + " on " + lock,
+         "color:orange"
+      );
+   },
+
+   unlock: function(lock) {
+      if (this.locks[lock]) {
+         console.log(
+            "%cunlock #" + this.locks[lock].handles + " on " + lock,
+            "color:green"
+         );
+         this.locks[lock].handles -= 1;
+
+         if (this.locks[lock].handles <= 0) {
+            var done = this.locks[lock].done;
+            delete this.locks[lock];
+
+            done.forEach(
+               fn =>
+                  fn.waitFor.filter(l => this.locks[l]).length == 0 &&
+                  fn.call(this)
+            );
+         }
+      }
+   },
+
+   preload: function() {
+      this.steps.forEach(step => {
+         if (step.preload) {
+            console.log("preload: " + step.name);
+            step.preload = step.preload.call(this);
+         } else {
+            step.preload = true;
          }
       });
-   });
+   },
 
-   return tree;
-}
-
-function mktree(entries, path = []) {
-   var chunk = $("<ul></ul>");
-
-   if (Array.isArray(entries)) {
-      if (entries.length == 0) return $("");
-
-      entries.forEach(function(e) {
-         mktree(e, path).appendTo(chunk);
-      });
-   } else if (typeof entries === typeof {}) {
-      if (Object.keys(entries).length <= 0) {
-         return $("");
+   afterPreload: function(complete) {
+      if (Object.keys(this.locks).length > 0) {
+         setTimeout(() => this.afterPreload(complete), 30); // wait until all preload locks are closed
+      } else {
+         this.preload(); // preload any new preload steps
+         complete(this);
       }
+   },
 
-      Object.keys(entries).forEach(key => {
-         var inner = $("<li></li>");
+   begin: function() {
+      this.preload();
 
-         $(
-            "<a class='pointer' name='" +
-               key +
-               "'><i class='" +
-               (expand_lock ? list_opened : list_closed) +
-               "'/>" +
-               key.replace("_", " ") +
-               "</a>"
-         )
-            .on("click", e => {
-               if (expand_lock) return;
+      this.afterPreload(() => {
+         this.steps.forEach(step => {
+            if (step.preload) {
+               if (step.waitFor) {
+                  this.lock(step.name);
+                  step.waitFor.forEach(lock => {
+                     if (this.locks[lock]) {
+                        var fn = function() {
+                           console.log("step: " + step.name);
+                           step[step.name].call(this);
+                           this.unlock(step.name);
+                        };
 
-               var list = $(e.target).siblings("ul");
-               var icon = $("i.fa", e.target);
-
-               list.toggle();
-
-               if (list.is(":visible")) {
-                  icon.removeClass(list_closed);
-                  icon.addClass(list_opened);
-               } else {
-                  icon.removeClass(list_opened);
-                  icon.addClass(list_closed);
-               }
-            })
-            .appendTo(inner);
-
-         path.push(key);
-         mktree(entries[key], path)
-            .hide()
-            .appendTo(inner);
-         path.pop();
-
-         inner.appendTo(chunk);
-      });
-   } else {
-      path = mkpath(path, entries);
-      cache[path] = false;
-
-      chunk = $(
-         nullAnchor(pathpref + path) +
-            "<li>" +
-            entries.replace("_", " ") +
-            "</li></a>"
-      )
-         .on("click", () => {
-            history.pushState("", "", pathpref + path);
-            mkentry(path, openpath);
-         })
-         .appendTo(chunk);
-   }
-
-   return chunk;
-}
-
-function mkentry(path, after) {
-   if (cache[path]) {
-      if (after) after(path);
-      return;
-   }
-
-   var entry_root = localStorage.getItem("entry_root") || "";
-
-   cache[path] = true;
-   $.get(
-      "entries/" +
-         entry_root +
-         "/" +
-         path.replace(new RegExp(pathsep, "g"), "/") +
-         ".md",
-      { _: $.now() },
-      function(entry) {
-         var title = path.replace(new RegExp(pathsep, "g"), titlesep);
-         if (entry_root.length > 0)
-            title = title.replace(entry_root + titlesep, "");
-         title = title.replace("_", " ");
-
-         var link = $("<h1 class='header'>").append(
-            $(nullAnchor(pathpref + path) + title + "</a><close></close>").on(
-               "click",
-               () => history.pushState("", "", pathpref + path)
-            )
-         );
-
-         var entryHtml = $(
-            "<entry id='" +
-               path +
-               "' style='display:none'>" +
-               "" +
-               marked(entry) +
-               "</entry>"
-         );
-         link.prependTo(entryHtml);
-         entryHtml.appendTo("content");
-
-         $("code", entryHtml).each(
-            (_, code) => typeof highlight != "undefined" && highlight(code)
-         );
-
-         $("a", entryHtml)
-            .filter((_, e) => !e.hash && e.href.split(pathpref)[1])
-            .attr("onclick", "return false")
-            .each((_, e) => {
-               $(e).click(() => {
-                  mkentry(e.href.split(pathpref)[1], openpath);
-                  history.pushState(
-                     "",
-                     "",
-                     pathpref + e.href.split(pathpref)[1]
-                  );
-               });
-            });
-
-         $("a", entryHtml)
-            .filter((_, e) => e.hash)
-            .each((_, e) => {
-               $(e).attr("onclick", "return false");
-               $(e).click(() => {
-                  var el = $(e.hash)[0];
-                  scrollUnderHeader(el);
-               });
-            });
-
-         $("table", entryHtml)
-            .wrap("<div class='table-box'>")
-            .each((_, e) => {
-               var titles = $("th", $("thead", e)).map((_, e) => e.textContent);
-               $("tr", $("tbody", e)).each((_, e) => {
-                  $("td", e).each((i, e) => {
-                     $(e).prepend(
-                        $("<div class='rd-th'>" + titles[i] + "</div>")
-                     );
+                        fn.waitFor = step.waitFor;
+                        this.locks[lock].done.push(fn);
+                     }
                   });
+               } else {
+                  console.log("step: " + step.name);
+                  step[step.name].call(this);
+               }
+            }
+         });
+      });
+
+      return this;
+   },
+
+   step: function(name) {
+      return this.steps[this.steps.findIndex(s => s.name == name)][name].apply(
+         this,
+         Array.prototype.slice.call(arguments).slice(1)
+      );
+   },
+});
+
+Wiktor.addStep({
+   loadExtensions: () => {},
+   preload: function() {
+      this.lock("loadExtensions");
+
+      Fetch(Wiktor.extensionRegistry, {
+         cache: this.storage.cache.core,
+
+         done: extensions => {
+            this.unlock("loadExtensions");
+
+            var extensions = JSON.parse(extensions);
+
+            Object.keys(extensions).forEach(ext => {
+               this.lock("loadExtensions");
+
+               Fetch(Wiktor.extensionPath + ext + ".js", {
+                  async: false,
+                  cache: this.storage.cache.extensions,
+
+                  done: (extension, req) => {
+                     if (req.status == 200 && extensions[ext].invalidate) {
+                        extensions[ext].invalidate.forEach(cache => {
+                           this.storage.cache[cache] = {};
+                        });
+                     }
+
+                     Function('"use strict";' + extension)();
+                     console.log("%cloaded extension: " + ext, "color:blue");
+                     this.unlock("loadExtensions");
+                  },
+
+                  fail: () => {
+                     throw new Error(
+                        "Wiktor: Failed to load extension: " + ext
+                     );
+                  },
                });
             });
+         },
 
-         $("close", entryHtml).on("click", function() {
-            entryHtml.fadeOut(fadetime);
-         });
+         fail: () => {
+            throw new Error("Wiktor: Failed to load extension list");
+         },
+      });
+   },
+});
 
-         if (after) $(() => after(path));
-      }
-   );
-}
-
-function wiktor(landing) {
-   $.getJSON("wiktor/entries.json", { _: $.now() }, entries => {
-      $("body").attr("class", localStorage.getItem("theme") || "light");
-
-      var entry_root = localStorage.getItem("entry_root");
-      var tree = preptree(entries);
-      tree = entry_root ? tree[0][entry_root] : tree;
-
-      if (tree) {
-         mktree(tree).appendTo("links");
-
-         var hashpath = decodeURI(window.location.href.split(pathpref)[1]);
-
-         if (hashpath != "undefined")
-            mkentry(hashpath.split(subsep)[0], () => openpath(hashpath));
-         else if (landing) mkentry(landing, openpath);
-
-         $(() => {
-            $(
-               "<a id='version' href='https://github.com/wiktor-wiki/wiktor'>Wiktor " +
-                  version +
-                  "</a>"
-            ).appendTo("#controls");
-         });
-      }
-
-      if (!($("links ul")[0] && $("links ul")[0].childElementCount != 0)) {
-         $("#empty").show();
-      }
-      $("body").fadeIn(fadetime);
-   }).fail(() => {
-      $("#empty").show();
-      $("body").fadeIn(fadetime);
-   });
+function wiktor(landing, title) {
+   var wiktor = new Wiktor(landing, title);
+   return wiktor.begin();
 }

@@ -1,6 +1,6 @@
 Wiktor wiki engine : MIT License
 
-Copyright (c) 2018, Daniēls Kursīts 'evolbug' (https://github.com/evolbug) 
+Copyright (c) 2018, Daniēls Kursīts 'evolbug' (https://github.com/evolbug)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,22 @@ SOFTWARE.
 
 ---
 
-THIS SOFTWARE USES : Marked.js (https://marked.js.org/) : MIT License
-Copyright (c) 2011-2018, Christopher Jeffrey (https://github.com/chjj/)
+Showdown (http://showdownjs.com/) : MIT License
+Copyright (c) 2017, Showdownjs (https://github.com/showdownjs)
 
 ---
 
-THIS SOFTWARE USES : jQuery 3.3.1 (https://jquery.org/) : MIT License
-Copyright (c) The jQuery Foundation
+Mark.js (https://markjs.io/) : MIT License
+Copyright (c) 2016, Julian Kühnel (https://www.juliankuehnel.com)
 
 ---
 
-THIS SOFTWARE USES : Fira Code (https://github.com/tonsky/FiraCode) : SIL OPEN FONT LICENSE Version 1.1
+Balalaika (https://github.com/finom/balalaika) : MIT License
+Copyright (c) 2014, Andrey Gubanov (http://gubanov.eu/)
+
+---
+
+Fira Code (https://github.com/tonsky/FiraCode) : SIL OPEN FONT LICENSE Version 1.1
 Copyright (c) 2014, Nikita Prokopov    http://tonsky.me     with Reserved Font Name Fira Code.
 Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Sans.
 Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Mono.
@@ -40,12 +45,12 @@ Copyright (c) 2014, Telefonica S.A.
 
 ---
 
-THIS SOFTWARE USES : Font Awesome (https://fontawesome.com/)
+Font Awesome (https://fontawesome.com/)
 Copyright (c) 2018, Fonticons, Inc.
 Fonts: SIL OFL 1.1 License (https://scripts.sil.org/OFL)
 Code: MIT License (https://opensource.org/licenses/MIT)
 
 ---
 
-THIS SOFTWARE USES : Montserrat (https://github.com/JulietaUla/Montserrat) : SIL OPEN FONT LICENSE Version 1.1
+Montserrat (https://github.com/JulietaUla/Montserrat) : SIL OPEN FONT LICENSE Version 1.1
 Copyright (c) 2011, The Montserrat Project Authors

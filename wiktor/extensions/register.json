@@ -1,0 +1,8 @@
+{
+   "balalaika": {},
+   "processors": { "invalidate": ["entries"] },
+   "core": { "invalidate": ["entries"] },
+   "widgets": {},
+   "widget-version": {},
+   "widget-themer": {}
+}
