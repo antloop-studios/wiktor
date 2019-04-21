@@ -22,10 +22,7 @@ class Persistor {
                 target[key] != undefined ? target[key] : target.old[key],
             set: (target, key, value) => {
                 target[key] = value;
-                setTimeout(
-                    () => (localStorage[target.key] = JSON.stringify(target)),
-                    1
-                );
+                localStorage[target.key] = JSON.stringify(target);
                 return true;
             },
         });
