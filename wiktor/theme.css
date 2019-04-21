@@ -1,0 +1,185 @@
+/* Config ------------------------------------------------------------------ */
+
+:root {
+    --font-code: monospace;
+    --font-text: sans-serif;
+    --accent: #af3f6e;
+    --page-bg: #f0f0f0;
+    --page-fg: #333;
+    --nav-bg: #f0f0f0;
+    --nav-fg: #222;
+    --entry-bg: #fff;
+    --entry-fg: #222;
+    --entry-header-bg: #fff;
+    --entry-header-fg: #222;
+    --entry-border: none;
+    --entry-header-border: none;
+    --widget-bg: #fff;
+    --widget-fg: #333;
+    --scrollbar: #0001;
+}
+
+/* End Config -------------------------------------------------------------- */
+
+.material-icons {
+    vertical-align: bottom;
+}
+
+#wiktor {
+    font-family: var(--font-text);
+    background: var(--page-bg);
+    color: var(--page-fg);
+    height: 100vh;
+}
+
+.overflow-auto {
+    overflow: auto;
+    scrollbar-color: var(--scrollbar) transparent;
+    scrollbar-width: thin;
+}
+
+.overflow-auto::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+    background: var(--scrollbar);
+}
+
+main {
+    height: 100%;
+}
+
+@media (min-width: 992px) {
+    .nav {
+        opacity: 0.5;
+        transition: opacity ease-out 0.5s;
+    }
+    .nav:hover {
+        opacity: 1;
+        transition: opacity ease-out 0.5s;
+    }
+}
+
+.nav {
+    background: var(--nav-bg);
+    color: var(--nav-fg);
+}
+
+nav li {
+    list-style: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+nav summary {
+    font-weight: bold;
+}
+
+nav a.lit {
+    color: var(--accent);
+}
+
+nav a {
+    display: flex;
+}
+
+article {
+    background: var(--entry-bg);
+    color: var(--entry-fg);
+    border: var(--entry-border);
+    overflow-x: auto;
+}
+
+article .article__title {
+    vertical-align: middle;
+    text-transform: uppercase;
+    background: var(--entry-header-bg);
+    color: var(--entry-header-fg);
+    border-bottom: var(--entry-header-border);
+}
+
+article table {
+    width: 100%;
+    min-width: 360px;
+    table-layout: fixed;
+    margin-bottom: 1rem;
+}
+
+article table th, article table td {
+    padding: 10px 5px;
+    min-width: 125px;
+}
+
+article table th {
+    color: var(--accent);
+    text-align: left;
+}
+
+article table thead {
+    border-bottom: 2px solid var(--accent);
+}
+
+article table tbody tr {
+    border-bottom: 1px dotted var(--accent);
+}
+
+.widget {
+    background: transparent;
+    border: none;
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-left: 0.5rem;
+    color: var(--widget-fg);
+}
+
+.widget select {
+    color: inherit;
+    border: none;
+    padding-right: 1.5rem;
+    background: var(--widget-bg);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+    text-align-last: center;
+}
+
+.widget select:hover {
+    cursor: pointer;
+}
+
+menu.widget .arrow {
+    position: relative;
+    margin: auto;
+    margin-left: -1.5rem;
+    pointer-events: none;
+}
+
+article img {
+    max-width: 100%;
+}
+
+article pre {
+    padding: 10px;
+    white-space: pre-wrap;
+}
+
+article pre code {
+    font-weight: 400;
+    padding: 0;
+    border: none;
+    color: var(--entry-fg);
+}
+
+article code {
+    font-family: var(--font-code);
+    color: var(--accent);
+}
+
+article .external-link::after {
+    content: "⌃";
+}

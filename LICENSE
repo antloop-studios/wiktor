@@ -1,6 +1,6 @@
-Wiktor wiki engine : MIT License
+MIT License
 
-Copyright (c) 2018, Daniēls Kursīts 'evolbug' (https://github.com/evolbug)
+Copyright (c) 2018, Daniēls Kursīts (https://github.com/evolbug)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,42 @@ SOFTWARE.
 
 ---
 
-Showdown (http://showdownjs.com/) : MIT License
-Copyright (c) 2017, Showdownjs (https://github.com/showdownjs)
-
----
-
-Mark.js (https://markjs.io/) : MIT License
-Copyright (c) 2016, Julian Kühnel (https://www.juliankuehnel.com)
-
----
-
 Balalaika (https://github.com/finom/balalaika) : MIT License
 Copyright (c) 2014, Andrey Gubanov (http://gubanov.eu/)
 
 ---
 
-Fira Code (https://github.com/tonsky/FiraCode) : SIL OPEN FONT LICENSE Version 1.1
-Copyright (c) 2014, Nikita Prokopov    http://tonsky.me     with Reserved Font Name Fira Code.
-Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Sans.
-Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Mono.
-Copyright (c) 2014, Telefonica S.A.
+Balalaika extensions (https://github.com/evolbug/balalaika-ext) : MIT License
+Copyright (c) 2019, Daniēls Kursīts (https://github.com/evolbug)
 
 ---
 
-Font Awesome (https://fontawesome.com/)
-Copyright (c) 2018, Fonticons, Inc.
-Fonts: SIL OFL 1.1 License (https://scripts.sil.org/OFL)
-Code: MIT License (https://opensource.org/licenses/MIT)
+Fetcher (https://github.com/evolbug/js-fetch) : MIT License
+Copyright (c) 2019, Daniēls Kursīts (https://github.com/evolbug)
 
 ---
 
-Montserrat (https://github.com/JulietaUla/Montserrat) : SIL OPEN FONT LICENSE Version 1.1
-Copyright (c) 2011, The Montserrat Project Authors
+Fragment (https://github.com/evolbug/js-fragment) : MIT License
+Copyright (c) 2019, Daniēls Kursīts (https://github.com/evolbug)
+
+---
+
+Persistor (https://github.com/evolbug/js-persistor) : MIT License
+Copyright (c) 2019, Daniēls Kursīts (https://github.com/evolbug)
+
+---
+
+Bootstrap Normalize (https://github.com/twbs/bootstrap) : MIT License
+Copyright (c) 2011-2019, The Bootstrap Authors
+Copyright (c) 2011-2019, Twitter, Inc.
+
+---
+
+Bootstrap (https://github.com/twbs/bootstrap) : MIT License
+Copyright (c) 2011-2019, The Bootstrap Authors
+Copyright (c) 2011-2019, Twitter, Inc.
+
+---
+
+Lighterhtml (https://github.com/WebReflection/lighterhtml) : ISC License
+Copyright (c) 2019, Andrea Giammarchi, @WebReflection

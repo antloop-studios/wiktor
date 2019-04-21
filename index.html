@@ -1,37 +1,64 @@
+<!DOCTYPE html>
 <html>
-   <head>
-      <!--
-         Wiktor wiki engine
-         Daniels Kursits (evolbug) 2018
-         MIT license
-      -->
+    <head>
+        <!--
+            Wiktor wiki engine
 
-      <meta charset="utf8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+            @copyright Daniels Kursits (evolbug), 2019 <https://github.com/evolbug>
+            @license MIT license <https://opensource.org/licenses/MIT>
+         -->
 
-      <!-- Lightweight DOM library -->
-      <script src="https://gitcdn.link/cdn/finom/balalaika/master/balalaika.min.js"></script>
+        <meta charset="utf8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <link rel="icon" type="image/x-icon" href="favicon.png" />
 
-      <!-- Markdown engine -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+        <!-- Layouts -->
+        <link
+            rel="stylesheet"
+            href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-reboot.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css"
+        />
 
-      <!-- Syntax highlighter -->
-      <!-- <script src="https://gitcdn.link/cdn/wiktor-wiki/langue/master/langue.js"></script> -->
+        <!-- Icons -->
+        <link
+            rel="stylesheet"
+            href="//fonts.googleapis.com/icon?family=Material+Icons"
+        />
 
-      <!-- Wiktor engine itself -->
-      <script src="/wiktor/wiktor.js"></script>
+        <!-- WIKTOR: theme -->
+        <link rel="stylesheet" href="wiktor/theme.css" />
 
-      <!-- Theme -->
-      <link rel="stylesheet/less" href="/wiktor/theme.less" />
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
-   </head>
+        <!-- WIKTOR: libs -->
+        <script src="//unpkg.com/lighterhtml@0.9.2/min"></script>
+        <script src="wiktor/lib/balalaika/balalaika.min.js"></script>
+        <script src="wiktor/lib/js-balalaika-ext/balalaika-ext.js"></script>
+        <script src="wiktor/lib/js-fragment/fragment.js"></script>
+        <script src="wiktor/lib/js-persistor/persistor.js"></script>
+        <script src="wiktor/lib/js-fetch/fetch.js"></script>
 
-   <body id="wiktor">
-      <noscript style="display:flex; flex-grow:1">
-         <p style="margin:auto">Please enable Javascript</p>
-      </noscript>
-      <script>
-         var w = wiktor("/", "Title");
-      </script>
-   </body>
+        <!-- WIKTOR: core -->
+        <script src="wiktor/wiktor.js"></script>
+        <script src="wiktor/util.js"></script>
+    </head>
+
+    <body id="wiktor" class="container d-flex flex-column">
+        <noscript style="display:flex; flex-grow:1">
+            <p style="margin:auto">
+                Please enable Javascript
+            </p>
+        </noscript>
+        <script>
+            var w = new Wiktor(document.body, {
+                entryRoot: "/",
+                title: "Wiktor",
+                landing: "",
+            });
+        </script>
+    </body>
 </html>
