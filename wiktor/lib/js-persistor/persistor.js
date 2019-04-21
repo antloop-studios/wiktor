@@ -15,8 +15,6 @@ class Persistor {
             enumerable: false,
         });
 
-        delete localStorage[key];
-
         return new Proxy(this, {
             get: (target, key) =>
                 target[key] != undefined ? target[key] : target.old[key],
